@@ -1,0 +1,12 @@
+id,item,status,reason
+I1,Possibility-admissibility-actuality hierarchy,READY_FOR_REVIEW,"organizes existing UCD distinction between law, allowed states, and realized state"
+I2,Master UCD selector P_UCD,READY_AS_DEFINITION,"can collect existing constraints without changing their content"
+I3,FRST finite actuality axiom,DO_NOT_IMPORT_AS_THEOREM,"UCD v14 still requires P0-FINACT"
+I4,Completed-carrier evolution distinction,READY_AS_HYPOTHESIS,"compatible with current creation discussion but mathematical finite proof remains conditional"
+I5,FRST local-frame gauge principle,ALREADY_STRUCTURALLY_PRESENT,"matches UCD left/right transport and holonomy architecture"
+I6,Internal-clock formulation,BRIDGE_REQUIRED,"compatible with UCD causal layers but equivalence not derived"
+I7,Relational metric expectation form,BRIDGE_REQUIRED,"UCD already has explicit load-to-edge-length map; relation should be derived"
+I8,Continuum as effective envelope,RECONCILIATION_REQUIRED,"older UCD infinite quasi-local/continuum branch must be separated from finite physical ontology"
+I9,Spectral mass interpretation,ALREADY_STRUCTURALLY_PRESENT,"UCD H504 has explicit finite ring gap; global physical gap remains separate"
+I10,Born/decoherence organization,ALREADY_PRESENT,"current UCD ledger already uses Born/Gleason and entropy/record structure"
+I11,Unique selector/H/rho0 theorem,TOP_PRIORITY_OPEN,"shared foundational incompleteness"

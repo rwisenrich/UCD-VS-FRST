@@ -1,0 +1,8 @@
+{
+  "release":"UCD_VS_FRST_FINITE_SEPARATOR_BASIS_v5_0",
+  "machine_checks":{"passed":42,"total":42,"all_pass":true},
+  "main_theorem":"If m finite persistent binary distinctions jointly separate all realized primitive identities, X injects into {0,1}^m and |X| <= 2^m. General finite-outcome bound: |X| <= product_j |A_j|.",
+  "ucd_new_gate":{"id":"P0-FINSEP","status":"NEW_PHYSICAL_PRINCIPLE_REQUIRED","consequence":"P0-FINSEP => finite realized carrier => P0-FINACT"},
+  "coding_facts":{"Q72_labels_min_binary_coordinates":7,"H504_labels_min_binary_coordinates":9,"warning":"coding lower bounds only; not source-number derivations"},
+  "machine_verdict":"V5_FINITE_SEPARATOR_THEOREM_PASS__P0_FINSEP_EXACT_SUFFICIENT_ROUTE_FOUND__SOURCE_DERIVATION_REMAINS"
+}

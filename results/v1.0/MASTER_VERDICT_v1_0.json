@@ -1,0 +1,14 @@
+{
+  "release": "FRST_UCD_FREEZE_COMPARE_v1_0",
+  "frst_freeze": "FROZEN_SEPARATE",
+  "frst_machine": "FRST_V1_INTERNAL_MACHINE_PASS__23_OF_23",
+  "frst_pytest": "PASS__3_OF_3",
+  "ucd_v14_replay": "PASS__RUN_ALL_AND_15_OF_15_PYTEST",
+  "ucd_h504_replay": "PASS__DIM_504_HERMITIAN_DIC6_SYMMETRY_RING_GAP",
+  "ucd_core_replay_verifier": "UCD_CORE_REPLAY_PASS__14_OF_14",
+  "comparison_firewall": "FRST_UCD_COMPARISON_FIREWALL_PASS__9_OF_9",
+  "central_comparison_result": "FRST supplies a generic finite relational selection architecture. UCD is a much more specific candidate realization, but UCD v14 does not yet derive finite actuality unconditionally because P0-FINACT remains open.",
+  "major_reconciliation": "Older UCD quasi-local/infinite-system and continuum constructions should be distinguished from physical ontology if UCD finite realization closes. They may remain as mathematical completion/benchmark tools.",
+  "top_shared_frontier": ["derive the physical selector rather than only specify it", "derive the physical Hamiltonian/couplings from upstream law", "derive the realized initial state/history", "for UCD specifically, close P0-FINACT before asserting a finite realized Hnet as theorem"],
+  "github_at_freeze_time": "NOT_TOUCHED"
+}

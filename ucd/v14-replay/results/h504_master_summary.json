@@ -1,0 +1,17 @@
+{
+  "dimension": 504,
+  "tau": 0.013888888888888888,
+  "exp_minus_tau": 0.9862071167439163,
+  "canonical_kappa": 0.1,
+  "target_ring_gap": 0.19724142334878325,
+  "hermiticity_residual": 0.0,
+  "right_regular_commutator_norm_a": 0.0,
+  "right_regular_commutator_norm_x": 0.0,
+  "projector_sum_residual": 2.6980905623958076e-15,
+  "max_ring_gap_deviation_across_irreps": 5.551115123125783e-16,
+  "expected_d_gap_d_kappa": 1.9724142334878325,
+  "max_non_ring_sensitivity_abs": 1.7208456881689926e-15,
+  "direct_projection_max_dH_dkappa_norm": 0.0,
+  "schur_projection_min_dH_dkappa_norm": 11.363712093580244,
+  "schur_projection_max_dH_dkappa_norm": 42.20764293740991
+}

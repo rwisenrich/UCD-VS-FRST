@@ -1,0 +1,8 @@
+{
+  "release": "UCD_VS_FRST_SOURCE_SELECTOR_TOURNAMENT_v3_0",
+  "parent": "UCD_VS_FRST_SELECTOR_ACTUALITY_v2_0",
+  "machine_checks": {"passed": 40, "total": 40, "all_pass": true},
+  "closed": ["Finite-group average gives canonical projector onto invariant subspace.", "Symmetry alone is generically insufficient to uniquely choose selector or Hamiltonian.", "Unique singlet selection is available conditionally when pointwise invariance is a law and the trivial irrep occurs once.", "Unique-ground actualization is available conditionally when actualization=minimal energy and the ground state is nondegenerate.", "Finite alphabet plus bounded arity gives a finite branching bound.", "Integer rank descent gives finite branch depth.", "Finite roots + finite branching + finite rank descent give an explicit finite realized-tree bound."],
+  "open": ["UCD must derive that primitive actualization is a bounded-arity function of finite native data before the finite-alphabet theorem can close P0-FINACT.", "UCD must derive, rather than assume, the source symmetry/singlet principle if group averaging is to become its selector theorem.", "UCD/FRST still need a unique source rule for the triple (P_phys,H,rho0), or an equivalent unified law.", "Neither H504 dimension 504 nor Q72 finiteness alone establishes finite ontic branching."],
+  "machine_verdict": "V3_SOURCE_SELECTOR_TOURNAMENT_PASS__FINITE_ALPHABET_PLUS_RANK_DESCENT_ROUTE_FOUND__NATIVE_UCD_DERIVATION_REMAINS"
+}

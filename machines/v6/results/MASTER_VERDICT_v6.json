@@ -1,0 +1,9 @@
+{
+  "release":"UCD_VS_FRST_SOURCE_FINITENESS_ROUTE_AUDIT_v6_0",
+  "machine_checks":{"passed":85,"total":85,"all_pass":true},
+  "correction":"P0-FINSEP is mathematically equivalent to finite cardinality when arbitrary separator predicates may be chosen. It is an operational characterization, not by itself a deeper explanation.",
+  "strong_countermodel":"Cantor space is compact and pairwise finitely distinguishable by coordinate tests yet has no uniform finite separator family and is infinite. Finite individual addresses with unbounded length also allow X=N.",
+  "retained_theorems":["compact + discrete => finite","finite branching + no infinite ray => finite rooted realized tree","finite budget + positive minimum cost => finite number of new events"],
+  "next_open":["P0-F1 source-native finite immediate actualization","P0-F2 source-native well-founded realized differentiation"],
+  "machine_verdict":"V6_SOURCE_FINITENESS_ROUTE_AUDIT_PASS__FINSEP_EQUIVALENCE_EXPOSED__P0_F1_F2_REMAIN_BEST_DYNAMICAL_ROUTE"
+}
