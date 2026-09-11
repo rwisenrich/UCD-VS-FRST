@@ -1,0 +1,16 @@
+{
+  "release": "UCD_VS_FRST_SELECTOR_ACTUALITY_v2_0",
+  "machine_checks": {"passed": 67, "total": 67, "all_pass": true},
+  "results": {
+    "constraint_intersection_projector": "THEOREM_CLOSED",
+    "noncommuting_projector_product": "FAILED_ROUTE_NO_GO",
+    "generic_selector_uniqueness": "FAILED_ROUTE_NO_GO",
+    "admissibility_vs_actuality": "THEOREM_CLOSED",
+    "selector_vs_dynamics": "THEOREM_CLOSED",
+    "finite_exact_continuum_identity": "FAILED_ROUTE_NO_GO",
+    "finite_low_mode_continuum_approximation": "THEOREM_CLOSED",
+    "UCD_P0_FINACT": "NEW_THEOREM_REQUIRED"
+  },
+  "metrics": {"entropy_max_excess": -0.008921812316570854, "continuum_worst_error_to_bound_ratio": 0.9999949800777722, "h504_gap_snapshot": 0.19724142334878325},
+  "claim_boundary": "Internal finite-dimensional theorem/counterexample verifier only. It does not prove FRST or UCD empirically correct and does not derive UCD P0-FINACT."
+}
