@@ -1,0 +1,170 @@
+name: Build and publish research artifacts
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'paper/*.pdf'
+      - 'paper/*.docx'
+      - 'releases/*.zip'
+      - 'releases/SHA256SUMS.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-publish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install document dependencies
+        run: python -m pip install --upgrade pip reportlab python-docx
+
+      - name: Build PDF DOCX and ZIP deliverables
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib, html, os, textwrap, zipfile
+          from reportlab.lib.pagesizes import letter
+          from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+          from reportlab.lib.enums import TA_CENTER
+          from reportlab.lib.units import inch
+          from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Preformatted, PageBreak
+          from docx import Document
+          from docx.shared import Inches, Pt
+
+          ROOT = Path('.')
+          PAPER = ROOT / 'paper'
+          RELEASES = ROOT / 'releases'
+          PAPER.mkdir(exist_ok=True)
+          RELEASES.mkdir(exist_ok=True)
+
+          def markdown_to_pdf(md_path, pdf_path, title):
+              text = Path(md_path).read_text(encoding='utf-8')
+              styles = getSampleStyleSheet()
+              styles.add(ParagraphStyle(name='CenterTitle', parent=styles['Title'], alignment=TA_CENTER, spaceAfter=16))
+              mono = ParagraphStyle(name='MonoSmall', parent=styles['Code'], fontName='Courier', fontSize=7.5, leading=9)
+              doc = SimpleDocTemplate(str(pdf_path), pagesize=letter, rightMargin=0.65*inch, leftMargin=0.65*inch, topMargin=0.65*inch, bottomMargin=0.65*inch, title=title)
+              story = [Paragraph(html.escape(title), styles['CenterTitle'])]
+              for raw in text.splitlines():
+                  line = raw.rstrip()
+                  if not line:
+                      story.append(Spacer(1, 5))
+                      continue
+                  if line.startswith('# '):
+                      story.append(Paragraph(html.escape(line[2:]), styles['Heading1']))
+                  elif line.startswith('## '):
+                      story.append(Paragraph(html.escape(line[3:]), styles['Heading2']))
+                  elif line.startswith('### '):
+                      story.append(Paragraph(html.escape(line[4:]), styles['Heading3']))
+                  elif line.startswith('```'):
+                      continue
+                  elif line.startswith('- '):
+                      story.append(Paragraph('&bull; ' + html.escape(line[2:]), styles['BodyText']))
+                  elif line[:2].isdigit() and '. ' in line[:4]:
+                      story.append(Paragraph(html.escape(line), styles['BodyText']))
+                  elif line.startswith('`') and line.endswith('`'):
+                      story.append(Preformatted(line.strip('`'), mono))
+                  else:
+                      story.append(Paragraph(html.escape(line).replace('`',''), styles['BodyText']))
+              doc.build(story)
+
+          def markdown_to_docx(md_path, docx_path, title):
+              text = Path(md_path).read_text(encoding='utf-8')
+              doc = Document()
+              sec = doc.sections[0]
+              sec.top_margin = Inches(0.65); sec.bottom_margin = Inches(0.65)
+              sec.left_margin = Inches(0.7); sec.right_margin = Inches(0.7)
+              doc.add_heading(title, 0)
+              for raw in text.splitlines():
+                  line = raw.rstrip()
+                  if not line:
+                      continue
+                  if line.startswith('# '):
+                      doc.add_heading(line[2:], level=1)
+                  elif line.startswith('## '):
+                      doc.add_heading(line[3:], level=2)
+                  elif line.startswith('### '):
+                      doc.add_heading(line[4:], level=3)
+                  elif line.startswith('- '):
+                      doc.add_paragraph(line[2:], style='List Bullet')
+                  else:
+                      p = doc.add_paragraph()
+                      r = p.add_run(line.replace('`',''))
+                      if any(tok in line for tok in ('->','subseteq','Delta_','H_','P_','rho','Omega_','Q_72')):
+                          r.font.name = 'Courier New'; r.font.size = Pt(9.5)
+              doc.save(str(docx_path))
+
+          frst_md = PAPER / 'FRST_v1.0_FROZEN_THEORY.md'
+          cmp_md = PAPER / 'FRST_vs_UCD_COMPARISON_REPORT_v1.0.md'
+          markdown_to_pdf(frst_md, PAPER/'FRST_v1.0_FROZEN_THEORY.pdf', 'Finite Relational Selection Theory - FRST v1.0')
+          markdown_to_docx(frst_md, PAPER/'FRST_v1.0_FROZEN_THEORY.docx', 'Finite Relational Selection Theory - FRST v1.0')
+          markdown_to_pdf(cmp_md, PAPER/'FRST_vs_UCD_COMPARISON_REPORT_v1.0.pdf', 'FRST vs Unified Coherence Dynamics - Comparison Report v1.0')
+          markdown_to_docx(cmp_md, PAPER/'FRST_vs_UCD_COMPARISON_REPORT_v1.0.docx', 'FRST vs Unified Coherence Dynamics - Comparison Report v1.0')
+
+          def add_tree(zf, path, arc_prefix=None):
+              path = Path(path)
+              if not path.exists():
+                  return
+              if path.is_file():
+                  zf.write(path, arcname=str(arc_prefix or path))
+                  return
+              for f in sorted(path.rglob('*')):
+                  if f.is_file() and '.git' not in f.parts and '__pycache__' not in f.parts and '.pytest_cache' not in f.parts:
+                      arc = Path(arc_prefix) / f.relative_to(path) if arc_prefix else f
+                      zf.write(f, arcname=str(arc))
+
+          def make_zip(name, entries):
+              out = RELEASES / name
+              with zipfile.ZipFile(out, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+                  for path, prefix in entries:
+                      add_tree(zf, path, prefix)
+              return out
+
+          generated = [
+              PAPER/'FRST_v1.0_FROZEN_THEORY.pdf',
+              PAPER/'FRST_v1.0_FROZEN_THEORY.docx',
+              PAPER/'FRST_vs_UCD_COMPARISON_REPORT_v1.0.pdf',
+              PAPER/'FRST_vs_UCD_COMPARISON_REPORT_v1.0.docx',
+          ]
+
+          generated += [
+              make_zip('FRST_v1_0_FROZEN_PACKAGE.zip', [('frst/v1.0','frst/v1.0'), ('paper/FRST_v1.0_FROZEN_THEORY.md','paper/FRST_v1.0_FROZEN_THEORY.md'), ('paper/FRST_v1.0_FROZEN_THEORY.rtf','paper/FRST_v1.0_FROZEN_THEORY.rtf'), ('paper/FRST_v1.0_FROZEN_THEORY.pdf','paper/FRST_v1.0_FROZEN_THEORY.pdf'), ('paper/FRST_v1.0_FROZEN_THEORY.docx','paper/FRST_v1.0_FROZEN_THEORY.docx')]),
+              make_zip('FRST_UCD_FREEZE_COMPARE_v1_0.zip', [('frst/v1.0','frst/v1.0'), ('comparison/v1.0','comparison/v1.0'), ('paper','paper'), ('CURRENT_STATUS.md','CURRENT_STATUS.md'), ('docs/SCIENTIFIC_SCOPE.md','docs/SCIENTIFIC_SCOPE.md')]),
+              make_zip('UCD_CURRENT_CORE_REPLAY_FOR_FRST_COMPARE.zip', [('ucd','ucd'), ('results','results')]),
+              make_zip('UCD_P0_FINITE_REALIZATION_TERMINALITY_v14_0.zip', [('ucd/foundations/finite-realization-v14','UCD_P0_FINITE_REALIZATION_TERMINALITY_v14_0')]),
+              make_zip('UCD_VS_FRST_SELECTOR_ACTUALITY_v2_0.zip', [('machines/v2','UCD_VS_FRST_SELECTOR_ACTUALITY_v2_0')]),
+              make_zip('UCD_VS_FRST_SOURCE_SELECTOR_TOURNAMENT_v3_0.zip', [('machines/v3','UCD_VS_FRST_SOURCE_SELECTOR_TOURNAMENT_v3_0')]),
+              make_zip('UCD_VS_FRST_NATIVE_ACTUALIZATION_GRAMMAR_v4_0.zip', [('machines/v4','UCD_VS_FRST_NATIVE_ACTUALIZATION_GRAMMAR_v4_0')]),
+              make_zip('UCD_VS_FRST_FINITE_SEPARATOR_BASIS_v5_0.zip', [('machines/v5','UCD_VS_FRST_FINITE_SEPARATOR_BASIS_v5_0')]),
+              make_zip('UCD_VS_FRST_SOURCE_FINITENESS_ROUTE_AUDIT_v6_0.zip', [('machines/v6','UCD_VS_FRST_SOURCE_FINITENESS_ROUTE_AUDIT_v6_0')]),
+          ]
+
+          sums = []
+          for p in sorted(generated, key=lambda x: str(x)):
+              h = hashlib.sha256(Path(p).read_bytes()).hexdigest()
+              sums.append(f'{h}  {p}')
+          (RELEASES/'SHA256SUMS.txt').write_text('\n'.join(sums)+'\n', encoding='utf-8')
+
+      - name: Commit generated deliverables
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add paper/*.pdf paper/*.docx releases/*.zip releases/SHA256SUMS.txt
+          if git diff --cached --quiet; then
+            echo "Generated artifacts already current."
+          else
+            git commit -m "Publish generated PDF DOCX and release ZIP artifacts [skip ci]"
+            git push
+          fi
