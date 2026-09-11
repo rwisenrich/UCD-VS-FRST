@@ -1,0 +1,13 @@
+id,item,status,notes
+V14-01,Completed creation implies finite cardinality,FAILED_ROUTE_NO_GO,"Explicit completed infinite countermodel exists"
+V14-02,Universal condition/corruption plus completed creation implies finite cardinality,FAILED_ROUTE_NO_GO,"Universal predicate can hold on an infinite completed set"
+V14-03,Finite immediate actualization preserves finiteness,THEOREM_CLOSED,"If C_n finite and A(C_n) finite then C_n union A(C_n) finite"
+V14-04,Finite roots plus finite branching plus no infinite realized ray imply finite realized tree,THEOREM_CLOSED,"Koenig infinity lemma"
+V14-05,Finite realized identities plus injective persistent addressing imply finite realized address set,THEOREM_CLOSED,"Cardinality preserved by injective addressing"
+V14-06,Finite H-net vertex carrier implies finite realized edge relation,THEOREM_CLOSED,"E subseteq V x V"
+V14-07,Strict partition refinement on finite carrier terminates,THEOREM_CLOSED,"At most N_H-1 strict splits from one block"
+V14-08,Q72/H504 local finiteness proves global H-net finiteness,FAILED_ROUTE_NO_GO,"Finite local codebook does not bound global node count"
+V14-09,P0-F1 finite immediate lawful actualization,NEW_THEOREM_REQUIRED,"Must be derived from UCD source law"
+V14-10,P0-F2 no infinite physically realized strict differentiation chain,NEW_THEOREM_REQUIRED,"Must be derived from UCD source law"
+V14-11,Finite realized H-net,CONDITIONAL,"Follows once source-level finite-realization premises close"
+V14-12,H504 ring gap as finite subsystem spectral datum,THEOREM_CLOSED,"Delta_504=2*kappa*exp(-1/72); does not prove global finiteness"
